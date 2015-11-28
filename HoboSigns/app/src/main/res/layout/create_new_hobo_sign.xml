@@ -13,5 +13,5 @@
         android:layout_height="300.0dp"
         android:id="@+id/imageView1"
         android:adjustViewBounds="true" />
-
+    <com.example.nicklobue.hobosigns.MyDrawView android:id="@+id/drawView1" android:layout_height="wrap_content" android:layout_width="wrap_content" />
 </LinearLayout>

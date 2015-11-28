@@ -19,6 +19,7 @@ import android.content.pm.ResolveInfo;
 import android.provider.MediaStore;
 import android.os.Environment;
 import android.content.Intent;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 import android.app.*;
 
@@ -32,6 +33,7 @@ public class CreateHoboSignActivity extends AppCompatActivity{
 
     Uri fileUri = null;
     ImageView photoImage = null;
+    MyDrawView mDrawView = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +50,7 @@ public class CreateHoboSignActivity extends AppCompatActivity{
                 startActivityForResult(i, CAPTURE_IMAGE_ACTIVITY_REQ );
             }
         });
+        mDrawView = (MyDrawView)findViewById(R.id.drawView1);
     }
 
     private File getOutputPhotoFile() {
