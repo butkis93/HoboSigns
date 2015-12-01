@@ -1,5 +1,6 @@
 package util;
 
+import android.graphics.Bitmap;
 import android.location.Location;
 import android.media.Image;
 
@@ -12,12 +13,13 @@ import android.media.Image;
 public class HoboSign {
 
     Location location;
-    Image sign;
-    //Image overlay;
+    Bitmap sign;
+    //Bitmap overlay;
 
-    public HoboSign(Location location, Image sign) {
+    public HoboSign(Location location, Bitmap sign) {
         this.location = location;
         this.sign = sign;
+        //this.overlay = overlay;
     }
 
     public Location getLocation() {
@@ -28,19 +30,19 @@ public class HoboSign {
         this.location = location;
     }
 
-    public Image getSign() {
+    public Bitmap getSign() {
         return sign;
     }
 
-    public void setSign(Image sign) {
+    public void setSign(Bitmap sign) {
         this.sign = sign;
     }
 
-    /* public Image getOverlay() {
+    /* public Bitmap getOverlay() {
         return overlay;
     }
 
-    public void setOverlay(Image overlay) {
+    public void setOverlay(Bitmap overlay) {
         this.overlay = overlay;
     } */
 }
