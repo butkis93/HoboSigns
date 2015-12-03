@@ -52,40 +52,37 @@ public class ParseDatabaseManager {
         query.whereWithinMiles("locationCenter", new ParseGeoPoint(currentLocation.getLatitude(),
                 currentLocation.getLongitude()), radius);
 
-        /* Execute query */
-        query.findInBackground(new FindCallback<ParseObject>() {
-            @Override
-            public void done(List<ParseObject> objects, ParseException e) {
-                /* The query was carried out with no errors */
-                if(e == null) {
-                    for(ParseObject sign: objects) {
+        try {
+            /* Execute query */
+            List<ParseObject> parseSigns = query.find();
+
+            /* Process Results */
+            for (ParseObject sign : parseSigns) {
                         /* Create temporary location of current sign */
-                        Location tempLocation = new Location("ParseSignLocation");
-                        tempLocation.setLatitude(sign.getParseGeoPoint("locationCenter").getLatitude());
-                        tempLocation.setLongitude(sign.getParseGeoPoint("locationCenter").getLongitude());
+                Location tempLocation = new Location("ParseSignLocation");
+                tempLocation.setLatitude(sign.getParseGeoPoint("locationCenter").getLatitude());
+                tempLocation.setLongitude(sign.getParseGeoPoint("locationCenter").getLongitude());
 
-                        try {
-                            /* Retrieving image stored in parse */
-                            byte[] bArray = sign.getParseFile("ImageFile").getData();
-                            Bitmap tempImage = BitmapFactory.decodeByteArray(bArray, 0, bArray.length);
+                try {
+                    /* Retrieving image stored in parse */
+                    byte[] bArray = sign.getParseFile("ImageFile").getData();
+                    Bitmap tempImage = BitmapFactory.decodeByteArray(bArray, 0, bArray.length);
 
-                            /* Retrieving overlay image
-                            byte[] overlayArray = sign.getParseFile("OverlayImage").getData();
-                            Bitmap tempOverlay = BitmapFactory.decodeByteArray(overlayArray, 0, overlayArray.length); */
+                    /* Retrieving overlay image
+                    byte[] overlayArray = sign.getParseFile("OverlayImage").getData();
+                    Bitmap tempOverlay = BitmapFactory.decodeByteArray(overlayArray, 0, overlayArray.length); */
 
-                            /* Create new hobosign to add to arraylist */
-                            hoboSigns.add(new HoboSign(tempLocation, tempImage));
-                        } catch (ParseException e1) {
-                            e1.printStackTrace();
-                        }
-                    }
-                } else {
-                    Log.i("ParseDBManager", "Error in call to parse find in background" + e);
+                    /* Create new hobosign to add to arraylist */
+                    hoboSigns.add(new HoboSign(tempLocation, tempImage));
+                } catch (ParseException e1) {
+                    e1.printStackTrace();
                 }
             }
-        });
 
-
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        
         return hoboSigns;
     }
 
