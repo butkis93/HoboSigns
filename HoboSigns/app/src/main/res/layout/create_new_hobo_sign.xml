@@ -2,16 +2,29 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
+
+    <com.example.nicklobue.hobosigns.DrawableImageView android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/ChoosenImageView"
+        android:layout_alignParentTop="true"
+        android:adjustViewBounds="true">
+    </com.example.nicklobue.hobosigns.DrawableImageView>
+
     <Button
-        android:id="@+id/myButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Clear"
+        android:id="@+id/ClearPictureButton" />
+
+    <Button
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="Open Camera" />
-    <ImageView
-        android:src="@android:drawable/ic_menu_gallery"
-        android:layout_width="fill_parent"
-        android:layout_height="300.0dp"
-        android:id="@+id/imageView1"
-        android:adjustViewBounds="true" />
+        android:text="Choose Picture" android:id="@+id/ChoosePictureButton"
+        android:layout_centerVertical="true" />
 
+    <Button
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Save Picture" android:id="@+id/SavePictureButton"
+        android:layout_below="@+id/ChoosePictureButton" />
 </LinearLayout>

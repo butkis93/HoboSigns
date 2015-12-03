@@ -1,114 +1,166 @@
 package com.example.nicklobue.hobosigns;
 
-import android.media.Image;
-import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.net.Uri;
-import android.widget.ImageView;
-import android.widget.Button;
-import java.io.*;
-import java.util.Date;
-import android.view.View;
-import android.util.Log;
-import java.text.SimpleDateFormat;
-import android.graphics.Bitmap;
-import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
-import android.provider.MediaStore;
-import android.os.Environment;
+import java.io.FileNotFoundException;
+
+import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Matrix;
+import android.graphics.Paint;
+import android.net.Uri;
+import android.os.Bundle;
+import android.provider.MediaStore;
+import android.util.Log;
+import android.view.Display;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.View.OnTouchListener;
+import android.widget.Button;
+import android.widget.ImageView;
+import java.io.OutputStream;
+import android.content.ContentValues;
+import android.graphics.Bitmap.CompressFormat;
+import android.provider.MediaStore.Images.Media;
 import android.widget.Toast;
-import android.app.*;
 
-/**
- * Created by Alexandria BenDebba on 11/10/15.
- */
-public class CreateHoboSignActivity extends AppCompatActivity{
+public class CreateHoboSignActivity extends Activity implements View.OnClickListener,
+        View.OnTouchListener {
 
-    private static final String TAG = "CallCamera";
-    private static final int CAPTURE_IMAGE_ACTIVITY_REQ = 0;
+    ImageView choosenImageView;
+    Button choosePicture;
+    Button savePicture;
+    Button clearDrawing;
 
-    Uri fileUri = null;
-    ImageView photoImage = null;
+    Bitmap bmp;
+    Bitmap alteredBitmap;
+    Canvas canvas;
+    Paint paint;
+    Matrix matrix;
+    float downx = 0;
+    float downy = 0;
+    float upx = 0;
+    float upy = 0;
+
+    final String TAG = "Debugging";
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
+        Log.v("Drawing", "On create");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.create_new_hobo_sign);
-        photoImage = (ImageView) findViewById(R.id.imageView1);
-        Button callCameraButton = (Button) findViewById(R.id.myButton);
-        callCameraButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
-                Intent i = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                File file = getOutputPhotoFile();
-                fileUri = Uri.fromFile(getOutputPhotoFile());
-                i.putExtra(MediaStore.EXTRA_OUTPUT, fileUri);
-                startActivityForResult(i, CAPTURE_IMAGE_ACTIVITY_REQ );
-            }
-        });
+
+        choosenImageView = (ImageView) this.findViewById(R.id.ChoosenImageView);
+        choosePicture = (Button) this.findViewById(R.id.ChoosePictureButton);
+        savePicture = (Button) this.findViewById(R.id.SavePictureButton);
+        clearDrawing = (Button) this.findViewById(R.id.ClearPictureButton);
+
+        savePicture.setOnClickListener(this);
+        choosePicture.setOnClickListener(this);
+        clearDrawing.setOnClickListener(this);
+        choosenImageView.setOnTouchListener(this);
     }
 
-    private File getOutputPhotoFile() {
-        File directory = new File(Environment.getExternalStoragePublicDirectory(
-                Environment.DIRECTORY_PICTURES), getPackageName());
-        if (!directory.exists()) {
-            if (!directory.mkdirs()) {
-                Log.d(TAG, "Failed to create storage directory.");
-                return null;
-            }
+    private void dispatchTakePictureIntent() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            startActivityForResult(takePictureIntent, 1);
         }
-        //String timeStamp = new SimpleDateFormat("yyyMMdd_HHmmss", locale.UK).format(new Date());
-        String timeStamp = new SimpleDateFormat("yyyMMdd_HHmmss").format(new Date());
-        return new File(directory.getPath() + File.separator + "IMG_"
-                + timeStamp + ".jpg");
     }
 
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQ) {
-            if (resultCode == RESULT_OK) {
-                Uri photoUri = null;
-                if (data == null) {
-                    // A known bug here! The image should have saved in fileUri
-                    Toast.makeText(this, "Image saved successfully",
-                            Toast.LENGTH_LONG).show();
-                    photoUri = fileUri;
-                } else {
-                    photoUri = data.getData();
-                    Toast.makeText(this, "Image saved successfully in: " + data.getData(),
-                            Toast.LENGTH_LONG).show();
+    public void onClick(View v) {
+
+        if (v == choosePicture) {
+            Log.v(TAG,"Choosing picture");
+            dispatchTakePictureIntent();
+        } else if (v == savePicture) {
+            Log.v(TAG,"Saving picture");
+            if (alteredBitmap != null) {
+                ContentValues contentValues = new ContentValues(3);
+                contentValues.put(MediaStore.Images.Media.DISPLAY_NAME, "Draw On Me");
+                Uri imageFileUri = getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues);
+                try {
+                    OutputStream imageFileOS = getContentResolver().openOutputStream(imageFileUri);
+                    alteredBitmap.compress(Bitmap.CompressFormat.JPEG, 90, imageFileOS);
+                    Toast t = Toast.makeText(this, "Saved!", Toast.LENGTH_SHORT);
+                    t.show();
+
+                } catch (Exception e) {
+                    Log.v("EXCEPTION", e.getMessage());
                 }
-                // showPhoto(photoUri);
-            } else if (resultCode == RESULT_CANCELED) {
-                Toast.makeText(this, "Cancelled", Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(this, "Callout for image capture failed!",
-                        Toast.LENGTH_LONG).show();
             }
+        } else if (v == clearDrawing) {
+            Log.v(TAG, "Clear drawing");
+            setDrawingArea();
         }
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_hobo_signs_main, menu);
+    void setDrawingArea(){
+        alteredBitmap = Bitmap.createBitmap(bmp.getWidth(), bmp
+                .getHeight(), bmp.getConfig());
+        Log.v(TAG,"width is " + bmp.getWidth() + " height is " + bmp.getHeight());
+        canvas = new Canvas(alteredBitmap);
+        paint = new Paint();
+        paint.setColor(Color.BLACK);
+        paint.setStrokeWidth(35);
+        matrix = new Matrix();
+        canvas.drawBitmap(bmp, matrix, paint);
+
+        choosenImageView.setImageBitmap(alteredBitmap);
+        choosenImageView.setOnTouchListener(this);
+    }
+
+    protected void onActivityResult(int requestCode, int resultCode,
+                                    Intent intent) {
+        super.onActivityResult(requestCode, resultCode, intent);
+
+        if (resultCode == RESULT_OK) {
+            Uri imageFileUri = intent.getData();
+            try {
+                BitmapFactory.Options bmpFactoryOptions = new BitmapFactory.Options();
+                bmpFactoryOptions.inJustDecodeBounds = true;
+                bmp = BitmapFactory.decodeStream(getContentResolver().openInputStream(
+                        imageFileUri), null, bmpFactoryOptions);
+
+                bmpFactoryOptions.inJustDecodeBounds = false;
+                bmp = BitmapFactory.decodeStream(getContentResolver().openInputStream(
+                        imageFileUri), null, bmpFactoryOptions);
+
+                setDrawingArea();
+            } catch (Exception e) {
+                Log.v("ERROR", e.toString());
+            }
+        }
+    }
+    public boolean onTouch(View v, MotionEvent event) {
+        int action = event.getAction();
+        switch (action) {
+            case MotionEvent.ACTION_DOWN:
+                downx = event.getX();
+                downy = event.getY();
+                break;
+            case MotionEvent.ACTION_MOVE:
+                upx = event.getX();
+                upy = event.getY();
+                canvas.drawLine(downx, downy, upx, upy, paint);
+                choosenImageView.invalidate();
+                downx = upx;
+                downy = upy;
+                break;
+            case MotionEvent.ACTION_UP:
+                upx = event.getX();
+                upy = event.getY();
+                canvas.drawLine(downx, downy, upx, upy, paint);
+                choosenImageView.invalidate();
+                break;
+            case MotionEvent.ACTION_CANCEL:
+                break;
+            default:
+                break;
+        }
         return true;
     }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
 }
-
