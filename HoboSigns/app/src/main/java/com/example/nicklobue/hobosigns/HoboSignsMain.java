@@ -4,6 +4,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+
+import com.parse.Parse;
 
 public class HoboSignsMain extends AppCompatActivity {
 
@@ -11,6 +15,34 @@ public class HoboSignsMain extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_hobo_signs_main);
+
+        /* Initialize parse local datastore */
+        Parse.enableLocalDatastore(this);
+
+        /* Initialize connection to parse with api keys */
+        Parse.initialize(this, "1J9hTNVJ2Z36fhubap7BrlJmzd2lC7nd7eglw9OT",
+                "g2gOHfKR04uVTB2yuoyjnBQ8YPwxpxw757oc4ukw");
+
+        /* References to buttons for creating hobosigns and viewing hobosigns
+         */
+        Button view = (Button) findViewById(R.id.view_hobosigns);
+        Button create = (Button) findViewById(R.id.create_hobosigns);
+
+        /* Create on click listener to start proper activities */
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                /* Create intents and start activity */
+                //startActivity();
+            }
+        });
+
+        create.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                /* Create intent and start activity */
+            }
+        });
     }
 
     @Override

@@ -5,7 +5,33 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin" tools:context=".HoboSignsMain">
 
-    <TextView android:text="@string/hello_world" android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+    <TextView android:text="HoboSigns" android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:id="@+id/Title" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="View HoboSigns"
+        android:id="@+id/view_hobosigns"
+        android:layout_centerVertical="true"
+        android:layout_alignLeft="@+id/create_hobosigns"
+        android:layout_alignStart="@+id/create_hobosigns"
+        android:layout_alignRight="@+id/create_hobosigns"
+        android:layout_alignEnd="@+id/create_hobosigns" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Create HoboSigns"
+        android:id="@+id/create_hobosigns"
+        android:layout_below="@+id/view_hobosigns"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="54dp" />
 
 </RelativeLayout>
