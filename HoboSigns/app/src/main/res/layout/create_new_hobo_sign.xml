@@ -3,15 +3,21 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
     <Button
-        android:id="@+id/myButton"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="Open Camera" />
-    <ImageView
-        android:src="@android:drawable/ic_menu_gallery"
+        android:text="Choose Picture" android:id="@+id/ChoosePictureButton"
+        android:layout_centerVertical="true"
+        android:layout_alignParentStart="false"
+        android:layout_alignParentEnd="false" />
+    <com.example.nicklobue.hobosigns.DrawableImageView android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/ChoosenImageView"
+        android:layout_alignParentTop="true">
+    </com.example.nicklobue.hobosigns.DrawableImageView>
+    <Button
         android:layout_width="fill_parent"
-        android:layout_height="300.0dp"
-        android:id="@+id/imageView1"
-        android:adjustViewBounds="true" />
-    <com.example.nicklobue.hobosigns.MyDrawView android:id="@+id/drawView1" android:layout_height="wrap_content" android:layout_width="wrap_content" />
+        android:layout_height="wrap_content"
+        android:text="Save Picture" android:id="@+id/SavePictureButton"
+        android:layout_below="@+id/ChoosePictureButton"
+        android:layout_alignParentStart="true" />
 </LinearLayout>
