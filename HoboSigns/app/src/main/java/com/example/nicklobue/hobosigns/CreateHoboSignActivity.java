@@ -3,6 +3,7 @@ package com.example.nicklobue.hobosigns;
 import java.io.FileNotFoundException;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -10,6 +11,8 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
+import android.location.Location;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -27,13 +30,20 @@ import android.graphics.Bitmap.CompressFormat;
 import android.provider.MediaStore.Images.Media;
 import android.widget.Toast;
 
+import util.HoboSign;
+import util.ParseDatabaseManager;
+
 public class CreateHoboSignActivity extends Activity implements View.OnClickListener,
         View.OnTouchListener {
 
-    ImageView choosenImageView;
+    ImageView chosenImageView;
     Button choosePicture;
     Button savePicture;
     Button clearDrawing;
+
+    ParseDatabaseManager parseDatabaseManager;
+    Location location;
+    LocationManager locationManager;
 
     Bitmap bmp;
     Bitmap alteredBitmap;
@@ -53,15 +63,20 @@ public class CreateHoboSignActivity extends Activity implements View.OnClickList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.create_new_hobo_sign);
 
-        choosenImageView = (ImageView) this.findViewById(R.id.ChosenImageView);
-        choosePicture = (Button) this.findViewById(R.id.TakePictureButton);
+        chosenImageView = (ImageView) this.findViewById(R.id.ChosenImageView);
+        choosePicture = (Button) this.findViewById(R.id.ChoosePictureButton);
         savePicture = (Button) this.findViewById(R.id.SavePictureButton);
         clearDrawing = (Button) this.findViewById(R.id.ClearPictureButton);
 
         savePicture.setOnClickListener(this);
         choosePicture.setOnClickListener(this);
         clearDrawing.setOnClickListener(this);
-        choosenImageView.setOnTouchListener(this);
+        chosenImageView.setOnTouchListener(this);
+        chosenImageView.setDrawingCacheEnabled(true);
+
+        locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
+        location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER); // this gives a warning but I'm ignoring it
+        Log.v(TAG,location.getLatitude()+ " " + location.getLongitude());
     }
 
     private void dispatchTakePictureIntent() {
@@ -79,7 +94,11 @@ public class CreateHoboSignActivity extends Activity implements View.OnClickList
         } else if (v == savePicture) {
             Log.v(TAG,"Saving picture");
             if (alteredBitmap != null) {
-                //
+                //MediaStore.Images.Media.insertImage(getContentResolver(), alteredBitmap, "tester1" , "test");
+                HoboSign hoboSign = new HoboSign(location,chosenImageView.getDrawingCache());
+                parseDatabaseManager.saveOrUpdate(hoboSign);
+                Toast.makeText(this,"Hobo Sign Created",Toast.LENGTH_SHORT).show();
+                finish();
             }
         } else if (v == clearDrawing) {
             Log.v(TAG, "Clear drawing");
@@ -98,8 +117,9 @@ public class CreateHoboSignActivity extends Activity implements View.OnClickList
         matrix = new Matrix();
         canvas.drawBitmap(bmp, matrix, paint);
 
-        choosenImageView.setImageBitmap(alteredBitmap);
-        choosenImageView.setOnTouchListener(this);
+        chosenImageView.destroyDrawingCache();
+        chosenImageView.setImageBitmap(alteredBitmap);
+        chosenImageView.setOnTouchListener(this);
     }
 
     protected void onActivityResult(int requestCode, int resultCode,
@@ -128,28 +148,36 @@ public class CreateHoboSignActivity extends Activity implements View.OnClickList
         int action = event.getAction();
         switch (action) {
             case MotionEvent.ACTION_DOWN:
-                downx = event.getX();
-                downy = event.getY();
+                downx = getPointerCoords(event)[0];//event.getX();
+                downy = getPointerCoords(event)[1];//event.getY();
                 break;
             case MotionEvent.ACTION_MOVE:
-                upx = event.getX();
-                upy = event.getY();
+                upx = getPointerCoords(event)[0];//event.getX();
+                upy = getPointerCoords(event)[1];//event.getY();
                 canvas.drawLine(downx, downy, upx, upy, paint);
-                choosenImageView.invalidate();
+                chosenImageView.invalidate();
                 downx = upx;
                 downy = upy;
                 break;
             case MotionEvent.ACTION_UP:
-                upx = event.getX();
-                upy = event.getY();
+                upx = getPointerCoords(event)[0];//event.getX();
+                upy = getPointerCoords(event)[1];//event.getY();
                 canvas.drawLine(downx, downy, upx, upy, paint);
-                choosenImageView.invalidate();
-                break;
-            case MotionEvent.ACTION_CANCEL:
+                chosenImageView.invalidate();
                 break;
             default:
                 break;
         }
         return true;
+    }
+
+    final float[] getPointerCoords(MotionEvent e) {
+        final int index = e.getActionIndex();
+        final float[] coords = new float[] { e.getX(index), e.getY(index) };
+        Matrix matrix = new Matrix();
+        chosenImageView.getImageMatrix().invert(matrix);
+        matrix.postTranslate(chosenImageView.getScrollX(), chosenImageView.getScrollY());
+        matrix.mapPoints(coords);
+        return coords;
     }
 }

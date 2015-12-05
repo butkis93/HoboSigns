@@ -6,18 +6,21 @@
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/ChosenImageView" />
+        android:id="@+id/ChosenImageView"
+        android:adjustViewBounds="true"/>
 
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Take Picture"
-        android:id="@+id/TakePictureButton" />
+        android:id="@+id/ChoosePictureButton" />
+
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Save Picture"
         android:id="@+id/SavePictureButton" />
+
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
