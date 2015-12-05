@@ -27,10 +27,12 @@ import android.graphics.Bitmap.CompressFormat;
 import android.provider.MediaStore.Images.Media;
 import android.widget.Toast;
 
+import util.HoboSign;
+
 public class CreateHoboSignActivity extends Activity implements View.OnClickListener,
         View.OnTouchListener {
 
-    ImageView choosenImageView;
+    ImageView chosenImageView;
     Button choosePicture;
     Button savePicture;
     Button clearDrawing;
@@ -53,7 +55,7 @@ public class CreateHoboSignActivity extends Activity implements View.OnClickList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.create_new_hobo_sign);
 
-        choosenImageView = (ImageView) this.findViewById(R.id.ChoosenImageView);
+        chosenImageView = (ImageView) this.findViewById(R.id.ChosenImageView);
         choosePicture = (Button) this.findViewById(R.id.ChoosePictureButton);
         savePicture = (Button) this.findViewById(R.id.SavePictureButton);
         clearDrawing = (Button) this.findViewById(R.id.ClearPictureButton);
@@ -61,7 +63,8 @@ public class CreateHoboSignActivity extends Activity implements View.OnClickList
         savePicture.setOnClickListener(this);
         choosePicture.setOnClickListener(this);
         clearDrawing.setOnClickListener(this);
-        choosenImageView.setOnTouchListener(this);
+        chosenImageView.setOnTouchListener(this);
+        chosenImageView.setDrawingCacheEnabled(true);
     }
 
     private void dispatchTakePictureIntent() {
@@ -79,7 +82,8 @@ public class CreateHoboSignActivity extends Activity implements View.OnClickList
         } else if (v == savePicture) {
             Log.v(TAG,"Saving picture");
             if (alteredBitmap != null) {
-                //
+                HoboSign hoboSign = new HoboSign(null,chosenImageView.getDrawingCache());
+                Toast.makeText(this,"Hobo Sign Created",Toast.LENGTH_SHORT);
             }
         } else if (v == clearDrawing) {
             Log.v(TAG, "Clear drawing");
@@ -98,8 +102,9 @@ public class CreateHoboSignActivity extends Activity implements View.OnClickList
         matrix = new Matrix();
         canvas.drawBitmap(bmp, matrix, paint);
 
-        choosenImageView.setImageBitmap(alteredBitmap);
-        choosenImageView.setOnTouchListener(this);
+        chosenImageView.destroyDrawingCache();
+        chosenImageView.setImageBitmap(alteredBitmap);
+        chosenImageView.setOnTouchListener(this);
     }
 
     protected void onActivityResult(int requestCode, int resultCode,
@@ -128,28 +133,36 @@ public class CreateHoboSignActivity extends Activity implements View.OnClickList
         int action = event.getAction();
         switch (action) {
             case MotionEvent.ACTION_DOWN:
-                downx = event.getX();
-                downy = event.getY();
+                downx = getPointerCoords(event)[0];//event.getX();
+                downy = getPointerCoords(event)[1];//event.getY();
                 break;
             case MotionEvent.ACTION_MOVE:
-                upx = event.getX();
-                upy = event.getY();
+                upx = getPointerCoords(event)[0];//event.getX();
+                upy = getPointerCoords(event)[1];//event.getY();
                 canvas.drawLine(downx, downy, upx, upy, paint);
-                choosenImageView.invalidate();
+                chosenImageView.invalidate();
                 downx = upx;
                 downy = upy;
                 break;
             case MotionEvent.ACTION_UP:
-                upx = event.getX();
-                upy = event.getY();
+                upx = getPointerCoords(event)[0];//event.getX();
+                upy = getPointerCoords(event)[1];//event.getY();
                 canvas.drawLine(downx, downy, upx, upy, paint);
-                choosenImageView.invalidate();
-                break;
-            case MotionEvent.ACTION_CANCEL:
+                chosenImageView.invalidate();
                 break;
             default:
                 break;
         }
         return true;
+    }
+
+    final float[] getPointerCoords(MotionEvent e) {
+        final int index = e.getActionIndex();
+        final float[] coords = new float[] { e.getX(index), e.getY(index) };
+        Matrix matrix = new Matrix();
+        chosenImageView.getImageMatrix().invert(matrix);
+        matrix.postTranslate(chosenImageView.getScrollX(), chosenImageView.getScrollY());
+        matrix.mapPoints(coords);
+        return coords;
     }
 }
