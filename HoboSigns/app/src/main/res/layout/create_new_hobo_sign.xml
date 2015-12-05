@@ -3,17 +3,17 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Take Picture"
-        android:id="@+id/ChoosePictureButton" />
-
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/ChosenImageView"
         android:adjustViewBounds="true"/>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Take Picture"
+        android:id="@+id/ChoosePictureButton" />
 
     <RadioGroup
         android:layout_width="fill_parent"
@@ -58,14 +58,15 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Clear"
+        android:text="Clear Hobo Sign"
         android:id="@+id/ClearPictureButton"
         android:layout_gravity="center_horizontal" />
 
     <Button
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Create Hobo Sign"
-        android:id="@+id/SavePictureButton" />
+        android:id="@+id/SavePictureButton"
+        android:layout_gravity="center_horizontal" />
 
 </LinearLayout>

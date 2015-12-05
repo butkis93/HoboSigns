@@ -74,10 +74,10 @@ public class CreateHoboSignActivity extends Activity implements View.OnClickList
         savePicture.setOnClickListener(this);
         choosePicture.setOnClickListener(this);
         clearDrawing.setOnClickListener(this);
-        clearDrawing.setVisibility(View.INVISIBLE);
+        //clearDrawing.setVisibility(View.INVISIBLE);
         chosenImageView.setOnTouchListener(this);
         chosenImageView.setDrawingCacheEnabled(true);
-        colorPicker.setVisibility(View.INVISIBLE);
+        //colorPicker.setVisibility(View.INVISIBLE);
         colorPicker.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
@@ -150,8 +150,8 @@ public class CreateHoboSignActivity extends Activity implements View.OnClickList
         chosenImageView.setImageBitmap(alteredBitmap);
         chosenImageView.setOnTouchListener(this);
 
-        clearDrawing.setVisibility(View.VISIBLE);
-        colorPicker.setVisibility(View.VISIBLE);
+        //clearDrawing.setVisibility(View.VISIBLE);
+        //colorPicker.setVisibility(View.VISIBLE);
         choosePicture.setText("Retake Picture");
     }
 
