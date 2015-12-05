@@ -84,6 +84,7 @@ public class CreateHoboSignActivity extends Activity implements View.OnClickList
             if (alteredBitmap != null) {
                 HoboSign hoboSign = new HoboSign(null,chosenImageView.getDrawingCache());
                 Toast.makeText(this,"Hobo Sign Created",Toast.LENGTH_SHORT);
+                finish();
             }
         } else if (v == clearDrawing) {
             Log.v(TAG, "Clear drawing");
