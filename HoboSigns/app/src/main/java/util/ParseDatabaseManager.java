@@ -93,7 +93,8 @@ public class ParseDatabaseManager {
     public static void saveOrUpdate(HoboSign hoboSign) {
         /* Parse object to be pushed to database */
         ParseObject sign = new ParseObject("Signs");
-        sign.put("locationCenter", hoboSign.getLocation());
+        sign.put("locationCenter", new ParseGeoPoint(hoboSign.getLocation().getLatitude(),
+                hoboSign.getLocation().getLongitude()));
         sign.put("ImageFile", hoboSign.getSign());
         //sign.put("Overlay", hoboSign.getOverlay());
     }

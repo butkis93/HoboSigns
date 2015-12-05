@@ -3,6 +3,7 @@ package com.example.nicklobue.hobosigns;
 import java.io.FileNotFoundException;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -10,6 +11,8 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
+import android.location.Location;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -28,6 +31,7 @@ import android.provider.MediaStore.Images.Media;
 import android.widget.Toast;
 
 import util.HoboSign;
+import util.ParseDatabaseManager;
 
 public class CreateHoboSignActivity extends Activity implements View.OnClickListener,
         View.OnTouchListener {
@@ -36,6 +40,10 @@ public class CreateHoboSignActivity extends Activity implements View.OnClickList
     Button choosePicture;
     Button savePicture;
     Button clearDrawing;
+
+    ParseDatabaseManager parseDatabaseManager;
+    Location location;
+    LocationManager locationManager;
 
     Bitmap bmp;
     Bitmap alteredBitmap;
@@ -65,6 +73,10 @@ public class CreateHoboSignActivity extends Activity implements View.OnClickList
         clearDrawing.setOnClickListener(this);
         chosenImageView.setOnTouchListener(this);
         chosenImageView.setDrawingCacheEnabled(true);
+
+        locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
+        location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        Log.v(TAG,location.getLatitude()+ " " + location.getLongitude());
     }
 
     private void dispatchTakePictureIntent() {
@@ -82,8 +94,10 @@ public class CreateHoboSignActivity extends Activity implements View.OnClickList
         } else if (v == savePicture) {
             Log.v(TAG,"Saving picture");
             if (alteredBitmap != null) {
-                HoboSign hoboSign = new HoboSign(null,chosenImageView.getDrawingCache());
-                Toast.makeText(this,"Hobo Sign Created",Toast.LENGTH_SHORT);
+                MediaStore.Images.Media.insertImage(getContentResolver(), alteredBitmap, "tester1" , "test");
+                HoboSign hoboSign = new HoboSign(location,chosenImageView.getDrawingCache());
+                parseDatabaseManager.saveOrUpdate(hoboSign);
+                Toast.makeText(this,"Hobo Sign Created",Toast.LENGTH_SHORT).show();
                 finish();
             }
         } else if (v == clearDrawing) {
