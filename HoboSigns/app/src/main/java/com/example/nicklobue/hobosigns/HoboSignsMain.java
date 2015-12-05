@@ -46,7 +46,9 @@ public class HoboSignsMain extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 /* Create intents and start activity */
-                //startActivity();
+                Intent hoboSignIntent = new Intent(HoboSignsMain.this,
+                        HoboSignListActivity.class);
+                startActivity(hoboSignIntent);
             }
         });
 
