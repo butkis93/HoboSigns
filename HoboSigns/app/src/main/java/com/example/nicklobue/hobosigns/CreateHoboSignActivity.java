@@ -31,8 +31,14 @@ import android.provider.MediaStore.Images.Media;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
+import org.opencv.android.Utils;
+import org.opencv.core.CvType;
+import org.opencv.core.Mat;
+
 import util.HoboSign;
 import util.ParseDatabaseManager;
+
+import static org.opencv.core.Core.absdiff;
 
 public class CreateHoboSignActivity extends Activity implements View.OnClickListener,
         View.OnTouchListener {
@@ -124,8 +130,8 @@ public class CreateHoboSignActivity extends Activity implements View.OnClickList
                 /*HoboSign hoboSign = new HoboSign(location,chosenImageView.getDrawingCache());
                 parseDatabaseManager.saveOrUpdate(hoboSign);*/
                 SaveSign saveSign = new SaveSign();
-                Thread thread = new Thread(saveSign);
-                thread.start();
+                Thread thread1 = new Thread(saveSign);
+                thread1.start();
                 Toast.makeText(this,"Hobo Sign Created",Toast.LENGTH_SHORT).show();
                 finish();
             }
