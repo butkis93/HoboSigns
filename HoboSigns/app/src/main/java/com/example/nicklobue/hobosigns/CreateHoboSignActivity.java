@@ -94,8 +94,11 @@ public class CreateHoboSignActivity extends Activity implements View.OnClickList
         } else if (v == savePicture) {
             Log.v(TAG,"Saving picture");
             if (alteredBitmap != null) {
-                HoboSign hoboSign = new HoboSign(location,chosenImageView.getDrawingCache());
-                parseDatabaseManager.saveOrUpdate(hoboSign);
+                /*HoboSign hoboSign = new HoboSign(location,chosenImageView.getDrawingCache());
+                parseDatabaseManager.saveOrUpdate(hoboSign);*/
+                SaveSign saveSign = new SaveSign();
+                Thread thread = new Thread(saveSign);
+                thread.start();
                 Toast.makeText(this,"Hobo Sign Created",Toast.LENGTH_SHORT).show();
                 finish();
             }
@@ -178,5 +181,13 @@ public class CreateHoboSignActivity extends Activity implements View.OnClickList
         matrix.postTranslate(chosenImageView.getScrollX(), chosenImageView.getScrollY());
         matrix.mapPoints(coords);
         return coords;
+    }
+
+    private class SaveSign implements Runnable {
+        @Override
+        public void run() {
+            HoboSign hoboSign = new HoboSign(location,chosenImageView.getDrawingCache());
+            parseDatabaseManager.saveOrUpdate(hoboSign);
+        }
     }
 }
