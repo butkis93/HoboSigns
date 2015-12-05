@@ -1,5 +1,6 @@
 package com.example.nicklobue.hobosigns;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -46,6 +47,7 @@ public class HoboSignsMain extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 /* Create intent and start activity */
+                startActivity(new Intent(getApplicationContext(),CreateHoboSignActivity.class));
             }
         });
     }
