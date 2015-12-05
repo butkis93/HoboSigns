@@ -3,12 +3,17 @@ package com.example.nicklobue.hobosigns;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
 import com.parse.Parse;
+
+import org.opencv.android.BaseLoaderCallback;
+import org.opencv.android.LoaderCallbackInterface;
+import org.opencv.android.OpenCVLoader;
 
 public class HoboSignsMain extends AppCompatActivity {
 
@@ -23,6 +28,13 @@ public class HoboSignsMain extends AppCompatActivity {
         /* Initialize connection to parse with api keys */
         Parse.initialize(this, "1J9hTNVJ2Z36fhubap7BrlJmzd2lC7nd7eglw9OT",
                 "g2gOHfKR04uVTB2yuoyjnBQ8YPwxpxw757oc4ukw");
+
+        //Followed these instructions to install OpenCV:
+        //http://stackoverflow.com/questions/17767557/how-to-use-opencv-in-android-studio-using-gradle-build-tool
+        if (!OpenCVLoader.initAsync(OpenCVLoader.OPENCV_VERSION_3_0_0,
+                HoboSignsMain.this, mOpenCVCallBack)) {
+            Log.i("TEST", "Cannot connect to OpenCV Manager");
+        }
 
         /* References to buttons for creating hobosigns and viewing hobosigns
          */
@@ -68,4 +80,22 @@ public class HoboSignsMain extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+    private BaseLoaderCallback mOpenCVCallBack = new BaseLoaderCallback(this) {
+        @Override
+        public void onManagerConnected(int status) {
+            Log.i("TEST", "I'm in the onManagerConnected callback!");
+            switch (status) {
+                case LoaderCallbackInterface.SUCCESS: {
+                    //stuff
+                    Log.i("Init-OpenCV", "OpenCV loaded succesfully");
+                }
+                break;
+                default: {
+                    super.onManagerConnected(status);
+                }
+                break;
+            }
+        }
+    };
 }
