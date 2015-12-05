@@ -59,12 +59,7 @@ public class HoboSignListActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 //Fire an Intent to display the given hobo sign
-//                Intent hoboSignIntent = new Intent(HoboSigns_HoboSignsList_TestBench.this,
-//                        HoboSignActivity.class);
-//                //hoboSignIntent.put
-//                HoboSignListItem item = (HoboSignListItem)parent.getItemAtPosition(position);
-//                hoboSignIntent.putExtra("id", item.getId());
-//                startActivity(hoboSignIntent);
+//
             }
         });
 
