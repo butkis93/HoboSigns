@@ -10,6 +10,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
 
 import java.util.ArrayList;
@@ -59,7 +60,11 @@ public class HoboSignListActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 //Fire an Intent to display the given hobo sign
-//
+                HoboSign sign = (HoboSign) hsAdapter.getItem(position);
+                Intent data = sign.packageToIntent();
+                Intent launch = new Intent(getApplicationContext(), SingleSignViewActivity.class);
+                launch.putExtras(data);
+                startActivity(launch);
             }
         });
 
