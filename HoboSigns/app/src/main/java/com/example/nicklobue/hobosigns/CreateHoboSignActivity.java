@@ -28,6 +28,7 @@ import java.io.OutputStream;
 import android.content.ContentValues;
 import android.graphics.Bitmap.CompressFormat;
 import android.provider.MediaStore.Images.Media;
+import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import util.HoboSign;
@@ -40,8 +41,8 @@ public class CreateHoboSignActivity extends Activity implements View.OnClickList
     Button choosePicture;
     Button savePicture;
     Button clearDrawing;
+    RadioGroup colorPicker;
 
-    ParseDatabaseManager parseDatabaseManager;
     Location location;
     LocationManager locationManager;
 
@@ -50,6 +51,7 @@ public class CreateHoboSignActivity extends Activity implements View.OnClickList
     Canvas canvas;
     Paint paint;
     Matrix matrix;
+    int color = Color.BLACK;
     float downx = 0;
     float downy = 0;
     float upx = 0;
@@ -67,15 +69,39 @@ public class CreateHoboSignActivity extends Activity implements View.OnClickList
         choosePicture = (Button) this.findViewById(R.id.ChoosePictureButton);
         savePicture = (Button) this.findViewById(R.id.SavePictureButton);
         clearDrawing = (Button) this.findViewById(R.id.ClearPictureButton);
+        colorPicker = (RadioGroup) this.findViewById(R.id.ColorPicker);
 
         savePicture.setOnClickListener(this);
         choosePicture.setOnClickListener(this);
         clearDrawing.setOnClickListener(this);
+        clearDrawing.setVisibility(View.INVISIBLE);
         chosenImageView.setOnTouchListener(this);
         chosenImageView.setDrawingCacheEnabled(true);
+        colorPicker.setVisibility(View.INVISIBLE);
+        colorPicker.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                if (checkedId == R.id.blackButton) {
+                    color = Color.BLACK;
+                } else if (checkedId == R.id.blueButton) {
+                    color = Color.BLUE;
+                } else if (checkedId == R.id.whiteButton) {
+                    color = Color.WHITE;
+                } else if (checkedId == R.id.redButton) {
+                    color = Color.RED;
+                } else if (checkedId == R.id.greenButton) {
+                    color = Color.GREEN;
+                }
+                paint.setColor(color);
+            }
+        });
 
         locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
         location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER); // this gives a warning but I'm ignoring it
+        // Why I'm ignoring it
+        // the proposed solution (by Android Studio) is to call check permission, however that requires
+        // API level 23 and my phone (which is what we are testing with) has level 22
+        // currently it works fine without using the check permission (as far as we have tested it)
         Log.v(TAG,location.getLatitude()+ " " + location.getLongitude());
     }
 
@@ -89,8 +115,9 @@ public class CreateHoboSignActivity extends Activity implements View.OnClickList
     public void onClick(View v) {
 
         if (v == choosePicture) {
-            Log.v(TAG,"Choosing picture");
+            Log.v(TAG, "Choosing picture");
             dispatchTakePictureIntent();
+
         } else if (v == savePicture) {
             Log.v(TAG,"Saving picture");
             if (alteredBitmap != null) {
@@ -114,7 +141,7 @@ public class CreateHoboSignActivity extends Activity implements View.OnClickList
         Log.v(TAG,"width is " + bmp.getWidth() + " height is " + bmp.getHeight());
         canvas = new Canvas(alteredBitmap);
         paint = new Paint();
-        paint.setColor(Color.BLACK);
+        paint.setColor(color);
         paint.setStrokeWidth(35);
         matrix = new Matrix();
         canvas.drawBitmap(bmp, matrix, paint);
@@ -122,6 +149,10 @@ public class CreateHoboSignActivity extends Activity implements View.OnClickList
         chosenImageView.destroyDrawingCache();
         chosenImageView.setImageBitmap(alteredBitmap);
         chosenImageView.setOnTouchListener(this);
+
+        clearDrawing.setVisibility(View.VISIBLE);
+        colorPicker.setVisibility(View.VISIBLE);
+        choosePicture.setText("Retake Picture");
     }
 
     protected void onActivityResult(int requestCode, int resultCode,
@@ -187,7 +218,7 @@ public class CreateHoboSignActivity extends Activity implements View.OnClickList
         @Override
         public void run() {
             HoboSign hoboSign = new HoboSign(location,chosenImageView.getDrawingCache());
-            parseDatabaseManager.saveOrUpdate(hoboSign);
+            ParseDatabaseManager.saveOrUpdate(hoboSign);
         }
     }
 }
