@@ -6,6 +6,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 
 import com.parse.Parse;
 
@@ -23,10 +24,14 @@ public class HoboSignsMain extends AppCompatActivity {
         Parse.initialize(this, "1J9hTNVJ2Z36fhubap7BrlJmzd2lC7nd7eglw9OT",
                 "g2gOHfKR04uVTB2yuoyjnBQ8YPwxpxw757oc4ukw");
 
-        /* References to buttons for creating hobosigns and viewing hobosigns
+        /* References to buttons for creating hobosigns and viewing hobosigns,
+           along with logo image
          */
         Button view = (Button) findViewById(R.id.view_hobosigns);
         Button create = (Button) findViewById(R.id.create_hobosigns);
+        ImageView logo = (ImageView) findViewById(R.id.logo);
+
+        logo.setImageResource(R.drawable.hobo_signs_logo);
 
         /* Create on click listener to start proper activities */
         view.setOnClickListener(new View.OnClickListener() {
