@@ -75,7 +75,7 @@ public class CreateHoboSignActivity extends Activity implements View.OnClickList
         chosenImageView.setDrawingCacheEnabled(true);
 
         locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
-        location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER); // this gives a warning but I'm ignoring it
         Log.v(TAG,location.getLatitude()+ " " + location.getLongitude());
     }
 
@@ -94,7 +94,7 @@ public class CreateHoboSignActivity extends Activity implements View.OnClickList
         } else if (v == savePicture) {
             Log.v(TAG,"Saving picture");
             if (alteredBitmap != null) {
-                MediaStore.Images.Media.insertImage(getContentResolver(), alteredBitmap, "tester1" , "test");
+                //MediaStore.Images.Media.insertImage(getContentResolver(), alteredBitmap, "tester1" , "test");
                 HoboSign hoboSign = new HoboSign(location,chosenImageView.getDrawingCache());
                 parseDatabaseManager.saveOrUpdate(hoboSign);
                 Toast.makeText(this,"Hobo Sign Created",Toast.LENGTH_SHORT).show();
