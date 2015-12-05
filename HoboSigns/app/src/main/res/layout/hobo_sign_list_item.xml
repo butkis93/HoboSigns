@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="150dp">
+
+    <ImageView
+        android:id="@+id/hobo_sign_preview_view"
+        android:layout_width="150dp"
+        android:layout_height="fill_parent"/>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="225dp"
+        android:layout_height="fill_parent"
+        android:orientation="vertical"
+        android:gravity="center_horizontal">
+
+        <TextView
+            android:id="@+id/id_text_view"
+            android:text="tmp"
+            android:layout_marginTop="50dp"
+            android:layout_width="225dp"
+            android:layout_height="25dp"
+            android:textSize="15sp"
+            />
+
+    </LinearLayout>
+
+</LinearLayout>
