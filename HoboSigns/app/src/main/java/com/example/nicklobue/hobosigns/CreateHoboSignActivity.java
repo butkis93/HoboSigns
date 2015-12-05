@@ -53,8 +53,8 @@ public class CreateHoboSignActivity extends Activity implements View.OnClickList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.create_new_hobo_sign);
 
-        choosenImageView = (ImageView) this.findViewById(R.id.ChoosenImageView);
-        choosePicture = (Button) this.findViewById(R.id.ChoosePictureButton);
+        choosenImageView = (ImageView) this.findViewById(R.id.ChosenImageView);
+        choosePicture = (Button) this.findViewById(R.id.TakePictureButton);
         savePicture = (Button) this.findViewById(R.id.SavePictureButton);
         clearDrawing = (Button) this.findViewById(R.id.ClearPictureButton);
 

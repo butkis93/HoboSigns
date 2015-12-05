@@ -4,6 +4,8 @@ import android.graphics.Bitmap;
 import android.location.Location;
 import android.media.Image;
 
+import java.io.ByteArrayOutputStream;
+
 /**
  * Created by nicklobue on 11/19/15.
  * Will be used as a wrapper class to hold a
@@ -36,6 +38,12 @@ public class HoboSign {
 
     public void setSign(Bitmap sign) {
         this.sign = sign;
+    }
+
+    public byte[] getSignByteArray() {
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        sign.compress(Bitmap.CompressFormat.PNG, 100, stream);
+        return stream.toByteArray();
     }
 
     /* public Bitmap getOverlay() {

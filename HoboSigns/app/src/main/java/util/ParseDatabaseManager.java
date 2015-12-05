@@ -7,6 +7,7 @@ import android.util.Log;
 
 import com.parse.FindCallback;
 import com.parse.ParseException;
+import com.parse.ParseFile;
 import com.parse.ParseGeoPoint;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
@@ -93,8 +94,9 @@ public class ParseDatabaseManager {
     public static void saveOrUpdate(HoboSign hoboSign) {
         /* Parse object to be pushed to database */
         ParseObject sign = new ParseObject("Signs");
-        sign.put("locationCenter", hoboSign.getLocation());
-        sign.put("ImageFile", hoboSign.getSign());
+        sign.put("locationCenter", new ParseGeoPoint(hoboSign.getLocation().getLatitude(),
+                hoboSign.getLocation().getLongitude()));
+        sign.put("ImageFile", new ParseFile(hoboSign.getSignByteArray()));
         //sign.put("Overlay", hoboSign.getOverlay());
     }
 }
