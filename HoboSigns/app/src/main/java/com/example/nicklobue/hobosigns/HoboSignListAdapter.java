@@ -30,7 +30,7 @@ import util.HoboSign;
 public class HoboSignListAdapter extends BaseAdapter {
 
     private final Context mContext;
-    private final List<HoboSign> mItems = new ArrayList<HoboSign>();
+    private List<HoboSign> mItems = new ArrayList<HoboSign>();
 
     public HoboSignListAdapter(Context context) {
         mContext = context;
@@ -41,10 +41,28 @@ public class HoboSignListAdapter extends BaseAdapter {
         notifyDataSetChanged();
     }
 
+    public void remove(int pos) {
+        mItems.remove(pos);
+        notifyDataSetChanged();
+    }
+
     public void clear() {
         mItems.clear();
         notifyDataSetChanged();
 
+    }
+
+    public void removeFromFilter(ArrayList<Integer> listOfThingsToRemove) {
+        ArrayList<HoboSign> newList = new ArrayList<>();
+
+        for(int i = 0; i < mItems.size(); i++) {
+            if(listOfThingsToRemove.get(i) != i) {
+                newList.add(mItems.get(i));
+            }
+        }
+
+        mItems = newList;
+        notifyDataSetChanged();
     }
 
     /**
@@ -112,71 +130,5 @@ public class HoboSignListAdapter extends BaseAdapter {
         return itemLayout;
     }
 
-    public void filter(final Bitmap symbol) {
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                //Initialize all of our OpenCV matching stuff
-                Bitmap desiredSymbol = HoboSign.getResizedBitmap(symbol, 128);
 
-                ArrayList<Integer> listOfSignsToKeep = new ArrayList<>();
-                Mat desiredMat = new Mat(desiredSymbol.getWidth(), desiredSymbol.getHeight(), CvType.CV_8UC1);
-                Utils.bitmapToMat(desiredSymbol, desiredMat);
-
-                FeatureDetector fd = FeatureDetector.create(FeatureDetector.ORB);
-                DescriptorExtractor de = DescriptorExtractor.create(DescriptorExtractor.ORB);
-                DescriptorMatcher matcher = DescriptorMatcher.create(DescriptorMatcher.BRUTEFORCE_HAMMING);
-
-                MatOfKeyPoint testKps = new MatOfKeyPoint();
-                MatOfKeyPoint matchingImgKps = new MatOfKeyPoint();
-
-                Mat testDescriptors = new Mat();
-                Mat matchingImgDescriptors = new Mat();
-
-                fd.detect(desiredMat, matchingImgKps);
-                de.compute(desiredMat, matchingImgKps, matchingImgDescriptors);
-
-                //Gather a list of all HoboSigns whose symbols do not match to within a certain
-                //threshold
-                int i = 0;
-                double threshold = 100000.0d;
-                for (HoboSign sign : mItems) {
-                    //Bitmap img = sign.getSymbol();
-                    Bitmap img = null;
-                    Mat m = new Mat(img.getWidth(), img.getHeight(), CvType.CV_8UC1);
-                    Utils.bitmapToMat(img, m);
-                    fd.detect(m, testKps);
-                    de.compute(m, testKps, testDescriptors);
-
-                    MatOfDMatch matches = new MatOfDMatch();
-                    matcher.match(matchingImgDescriptors, testDescriptors, matches);
-                    List<DMatch> list = matches.toList();
-
-                    double sum = 0;
-                    double score = 0;
-                    for (int j = 0; j < list.size(); j++) {
-                        double d = list.get(j).distance;
-                        sum += d * d;
-                    }
-
-                    score = sum / (list.size() * list.size());
-
-                    if (score < threshold) {
-                        listOfSignsToKeep.add(i);
-                    }
-
-                    i++;
-                }
-
-                //Remove all HoboSigns we determined too different from the desired symbol
-                for(Integer indx : listOfSignsToKeep) {
-                    mItems.remove(indx);
-                    notifyDataSetChanged();
-                }
-            }
-        });
-
-        thread.start();
-
-    }
 }

@@ -17,4 +17,8 @@ public class GlobalSign {
         return globalSign;
     }
 
+    public static void clearCache() {
+        globalSign = null;
+    }
+
 }

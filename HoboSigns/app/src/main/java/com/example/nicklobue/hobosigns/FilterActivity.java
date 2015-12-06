@@ -126,7 +126,6 @@ public class FilterActivity extends Activity implements View.OnClickListener,
     }
 
     void releaseResources(){
-        alteredBitmap.recycle();
         bmp.recycle();
     }
 

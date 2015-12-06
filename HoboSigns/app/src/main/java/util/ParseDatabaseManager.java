@@ -68,6 +68,7 @@ public class ParseDatabaseManager {
                     /* Retrieving image stored in parse */
                     byte[] bArray = sign.getParseFile("ImageFile").getData();
                     Bitmap tempImage = BitmapFactory.decodeByteArray(bArray, 0, bArray.length);
+                    HoboSign.getResizedBitmap(tempImage, 100);
 
                     /* Retrieving overlay image
                     byte[] overlayArray = sign.getParseFile("OverlayImage").getData();
