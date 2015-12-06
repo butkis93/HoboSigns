@@ -38,6 +38,7 @@ public class DrawingImageView extends ImageView implements View.OnTouchListener 
         setOnTouchListener(this);
     }
 
+    // call this to get the drawable imageview
     public void setNewImage() {
         Bitmap.Config conf = Bitmap.Config.ARGB_8888; // see other conf types
         int w = ((View)getParent()).getWidth();
@@ -88,5 +89,9 @@ public class DrawingImageView extends ImageView implements View.OnTouchListener 
         matrix.postTranslate(getScrollX(), getScrollY());
         matrix.mapPoints(coords);
         return coords;
+    }
+
+    public Bitmap getBmp() {
+        return bmp;
     }
 }
