@@ -55,6 +55,21 @@ public class HoboSign {
         return stream.toByteArray();
     }
 
+    public static Bitmap getResizedBitmap(Bitmap image, int maxSize) {
+        int width = image.getWidth();
+        int height = image.getHeight();
+
+        float bitmapRatio = (float) width / (float) height;
+        if (bitmapRatio > 1) {
+            width = maxSize;
+            height = (int) (width / bitmapRatio);
+        } else {
+            height = maxSize;
+            width = (int) (height * bitmapRatio);
+        }
+        return Bitmap.createScaledBitmap(image, width, height, true);
+    }
+
     public Intent packageToIntent() {
 
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
@@ -65,12 +80,4 @@ public class HoboSign {
         intent.putExtra("sign", stream.toByteArray());
         return intent;
     }
-
-    /* public Bitmap getOverlay() {
-        return overlay;
-    }
-
-    public void setOverlay(Bitmap overlay) {
-        this.overlay = overlay;
-    } */
 }
