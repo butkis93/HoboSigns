@@ -19,10 +19,10 @@ public class SingleSignViewActivity extends Activity {
 
         setContentView(R.layout.single_sign_view);
 
-        Intent intent = getIntent();
-        HoboSign hoboSign = new HoboSign(intent);
+        /* Intent intent = getIntent();
+        HoboSign hoboSign = new HoboSign(intent); */
 
         ImageView sign = (ImageView) findViewById(R.id.single_sign);
-        sign.setImageBitmap(hoboSign.getSign());
+        sign.setImageBitmap(GlobalSign.getGlobalSign());
     }
 }

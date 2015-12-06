@@ -1,0 +1,6 @@
+<<<<<<< HEAD
+include ':app', ':libraries'
+include ':libraries:opencv'
+=======
+include ':libraries:opencv', ':app', ':libraries'
+>>>>>>> 85147ec9ce0a31a6df1a79b003c8344fde12a0d2
