@@ -1,16 +1,21 @@
 package com.example.nicklobue.hobosigns;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.location.Location;
 import android.location.LocationManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.NumberPicker;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -45,7 +50,7 @@ public class HoboSignListActivity extends AppCompatActivity {
             //TODO: error?
         }
 
-        hoboSignList = getSignsByLocation(location, 0.189394);
+       hoboSignList = getSignsByLocation(location, 0.189394);
 
         if(hoboSignList == null) {
             //TODO: error?
@@ -59,17 +64,12 @@ public class HoboSignListActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 //Fire an Intent to display the given hobo sign
-//
+                HoboSign sign = (HoboSign) hsAdapter.getItem(position);
+
+                GlobalSign.setGlobalSign(sign.getSign());
+                startActivity(new Intent(getApplicationContext(), SingleSignViewActivity.class));
             }
         });
-
-
-
-
-
-
-
-
     }
 
     @Override
@@ -86,11 +86,24 @@ public class HoboSignListActivity extends AppCompatActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        if (id == R.id.filter_settings) {
+            Bitmap desiredShape = getDesiredShapeFromUser();
+
+            Toast.makeText(getApplicationContext(), "Filtering...",
+                    Toast.LENGTH_LONG).show();
+
+            hsAdapter.filter(desiredShape);
+            Toast.makeText(getApplicationContext(), "Done filtering", Toast.LENGTH_LONG).show();
         }
 
         return super.onOptionsItemSelected(item);
     }
+
+    //TODO: implement this
+    private Bitmap getDesiredShapeFromUser() {
+        DrawingImageView hoboSignFilter = new DrawingImageView(this.getApplicationContext());
+        hoboSignFilter.setNewImage();
+        return hoboSignFilter.getBmp();
+    }
+
 }

@@ -32,6 +32,7 @@
             android:name=".HoboSignListActivity"
             android:label="@string/title_activity_hobo_sign_list" >
         </activity>
+        <activity android:name=".SingleSignViewActivity"/>
     </application>
 
 </manifest>
