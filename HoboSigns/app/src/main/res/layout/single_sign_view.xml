@@ -12,4 +12,15 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" />
 
+    <Button
+        android:drawableTop="@drawable/ic_action_home"
+        android:backgroundTint="#0000"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Back to Home"
+        android:id="@+id/back_home_button"
+        android:layout_below="@+id/single_sign"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="54dp" />
+
 </RelativeLayout>
