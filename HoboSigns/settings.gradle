@@ -1,2 +1,1 @@
 include ':libraries:opencv', ':app', ':libraries'
-

@@ -1,6 +1,8 @@
 package util;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.media.Image;
 
@@ -24,6 +26,13 @@ public class HoboSign {
         //this.overlay = overlay;
     }
 
+    public HoboSign(Intent intent) {
+        byte[] bArray = intent.getByteArrayExtra("sign");
+
+        this.sign = BitmapFactory.decodeByteArray(bArray, 0, bArray.length);
+        this.location = (Location) intent.getParcelableExtra("location");
+    }
+
     public Location getLocation() {
         return location;
     }
@@ -44,6 +53,17 @@ public class HoboSign {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         sign.compress(Bitmap.CompressFormat.PNG, 100, stream);
         return stream.toByteArray();
+    }
+
+    public Intent packageToIntent() {
+
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        sign.compress(Bitmap.CompressFormat.PNG, 100, stream);
+
+        Intent intent = new Intent();
+        intent.putExtra("location", location);
+        intent.putExtra("sign", stream.toByteArray());
+        return intent;
     }
 
     /* public Bitmap getOverlay() {

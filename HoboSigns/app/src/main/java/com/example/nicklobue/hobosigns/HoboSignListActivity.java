@@ -6,10 +6,12 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
 
 import java.util.ArrayList;
@@ -59,7 +61,17 @@ public class HoboSignListActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 //Fire an Intent to display the given hobo sign
-//
+                HoboSign sign = (HoboSign) hsAdapter.getItem(position);
+
+                GlobalSign.setGlobalSign(sign.getSign());
+                startActivity(new Intent(getApplicationContext(), SingleSignViewActivity.class));
+                /* Log.v("clicklist", "getting item from list");
+                Intent data = sign.packageToIntent();
+                data.setClass(getApplicationContext(), SingleSignViewActivity.class);
+
+                Log.v("clicklist", "added extras");
+                startActivity(data);
+                Log.v("clicklist","came back from activity"); */
             }
         });
 
