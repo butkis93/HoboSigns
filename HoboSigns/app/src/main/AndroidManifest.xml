@@ -33,6 +33,9 @@
             android:label="@string/title_activity_hobo_sign_list" >
         </activity>
         <activity android:name=".SingleSignViewActivity"/>
+        <activity android:name=".FilterActivity">
+
+        </activity>
     </application>
 
 </manifest>

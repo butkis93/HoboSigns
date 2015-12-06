@@ -1,7 +1,5 @@
 package com.example.nicklobue.hobosigns;
 
-import java.io.FileNotFoundException;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -17,30 +15,20 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
-import android.view.Display;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.View.OnTouchListener;
 import android.widget.Button;
 import android.widget.ImageView;
-import java.io.OutputStream;
-import android.content.ContentValues;
-import android.graphics.Bitmap.CompressFormat;
-import android.provider.MediaStore.Images.Media;
 import android.widget.RadioGroup;
 import android.widget.Toast;
-
-import org.opencv.android.Utils;
-import org.opencv.core.CvType;
-import org.opencv.core.Mat;
 
 import util.HoboSign;
 import util.ParseDatabaseManager;
 
-import static org.opencv.core.Core.absdiff;
-
-public class CreateHoboSignActivity extends Activity implements View.OnClickListener,
+/**
+ * Created by Tiny on 12/5/15.
+ */
+public class FilterActivity extends Activity implements View.OnClickListener,
         View.OnTouchListener {
 
     ImageView chosenImageView;
@@ -77,13 +65,13 @@ public class CreateHoboSignActivity extends Activity implements View.OnClickList
         clearDrawing = (Button) this.findViewById(R.id.ClearPictureButton);
         colorPicker = (RadioGroup) this.findViewById(R.id.ColorPicker);
 
+        Toast.makeText(this,"Draw the HoboSign you're looking for",Toast.LENGTH_SHORT).show();
+
         savePicture.setOnClickListener(this);
         choosePicture.setOnClickListener(this);
         clearDrawing.setOnClickListener(this);
-        //clearDrawing.setVisibility(View.INVISIBLE);
         chosenImageView.setOnTouchListener(this);
         chosenImageView.setDrawingCacheEnabled(true);
-        //colorPicker.setVisibility(View.INVISIBLE);
         colorPicker.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
@@ -121,16 +109,13 @@ public class CreateHoboSignActivity extends Activity implements View.OnClickList
     public void onClick(View v) {
 
         if (v == choosePicture) {
-            Log.v(TAG, "Choosing picture");
+            Log.v(TAG, "Taking picture");
             dispatchTakePictureIntent();
 
         } else if (v == savePicture) {
-            Log.v(TAG,"Saving picture");
+            Log.v(TAG,"Saving filter picture");
             if (alteredBitmap != null) {
-                SaveSign saveSign = new SaveSign();
-                Thread thread1 = new Thread(saveSign);
-                thread1.start();
-                Toast.makeText(this,"Hobo Sign Created",Toast.LENGTH_SHORT).show();
+                GlobalSign.setGlobalSign(alteredBitmap);
                 releaseResources();
                 finish();
             }
@@ -141,7 +126,6 @@ public class CreateHoboSignActivity extends Activity implements View.OnClickList
     }
 
     void releaseResources(){
-        alteredBitmap.recycle();
         bmp.recycle();
     }
 
@@ -220,14 +204,5 @@ public class CreateHoboSignActivity extends Activity implements View.OnClickList
         matrix.postTranslate(chosenImageView.getScrollX(), chosenImageView.getScrollY());
         matrix.mapPoints(coords);
         return coords;
-    }
-
-    private class SaveSign implements Runnable {
-        @Override
-        public void run() {
-            HoboSign hoboSign = new HoboSign(location,chosenImageView.getDrawingCache());
-            ParseDatabaseManager.saveOrUpdate(hoboSign);
-            chosenImageView.destroyDrawingCache();
-        }
     }
 }

@@ -18,18 +18,22 @@ import org.opencv.android.OpenCVLoader;
 
 public class HoboSignsMain extends AppCompatActivity {
 
+    static boolean alreadyStarted = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_hobo_signs_main);
 
+        if (alreadyStarted == false) {
         /* Initialize parse local datastore */
-        Parse.enableLocalDatastore(this);
+            Parse.enableLocalDatastore(this);
 
         /* Initialize connection to parse with api keys */
-        Parse.initialize(this, "1J9hTNVJ2Z36fhubap7BrlJmzd2lC7nd7eglw9OT",
-                "g2gOHfKR04uVTB2yuoyjnBQ8YPwxpxw757oc4ukw");
-
+            Parse.initialize(this, "1J9hTNVJ2Z36fhubap7BrlJmzd2lC7nd7eglw9OT",
+                    "g2gOHfKR04uVTB2yuoyjnBQ8YPwxpxw757oc4ukw");
+            alreadyStarted = true;
+        }
 
         //Followed these instructions to install OpenCV:
         //http://stackoverflow.com/questions/17767557/how-to-use-opencv-in-android-studio-using-gradle-build-tool
