@@ -6,6 +6,8 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.widget.ImageView;
 
+import util.HoboSign;
+
 /**
  * Created by Daniel on 11/22/2015.
  */
@@ -17,10 +19,10 @@ public class SingleSignViewActivity extends Activity {
 
         setContentView(R.layout.single_sign_view);
 
-        Intent intent = getIntent();
-        Bitmap img = null;
+        /* Intent intent = getIntent();
+        HoboSign hoboSign = new HoboSign(intent); */
 
         ImageView sign = (ImageView) findViewById(R.id.single_sign);
-        sign.setImageBitmap(img);
+        sign.setImageBitmap(GlobalSign.getGlobalSign());
     }
 }

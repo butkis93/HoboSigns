@@ -8,11 +8,11 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.NumberPicker;
 import android.widget.Toast;
@@ -64,7 +64,10 @@ public class HoboSignListActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 //Fire an Intent to display the given hobo sign
-//
+                HoboSign sign = (HoboSign) hsAdapter.getItem(position);
+
+                GlobalSign.setGlobalSign(sign.getSign());
+                startActivity(new Intent(getApplicationContext(), SingleSignViewActivity.class));
             }
         });
     }
@@ -98,8 +101,9 @@ public class HoboSignListActivity extends AppCompatActivity {
 
     //TODO: implement this
     private Bitmap getDesiredShapeFromUser() {
-        return null;
-        //return new Bitmap();
+        DrawingImageView hoboSignFilter = new DrawingImageView(this.getApplicationContext());
+        hoboSignFilter.setNewImage();
+        return hoboSignFilter.getBmp();
     }
 
 }

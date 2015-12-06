@@ -97,6 +97,11 @@ public class ParseDatabaseManager {
         sign.put("locationCenter", new ParseGeoPoint(hoboSign.getLocation().getLatitude(),
                 hoboSign.getLocation().getLongitude()));
         sign.put("ImageFile", new ParseFile(hoboSign.getSignByteArray()));
+        try {
+            sign.save();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         //sign.put("Overlay", hoboSign.getOverlay());
     }
 }
