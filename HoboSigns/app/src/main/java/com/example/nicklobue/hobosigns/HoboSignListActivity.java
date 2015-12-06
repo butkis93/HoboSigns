@@ -87,12 +87,13 @@ public class HoboSignListActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         if (id == R.id.filter_settings) {
-            Bitmap desiredShape = getDesiredShapeFromUser();
+            //Bitmap desiredShape = getDesiredShapeFromUser();
+            startActivity(new Intent(this, FilterActivity.class));
 
             Toast.makeText(getApplicationContext(), "Filtering...",
                     Toast.LENGTH_LONG).show();
 
-            hsAdapter.filter(desiredShape);
+            hsAdapter.filter(GlobalSign.getGlobalSign());
             Toast.makeText(getApplicationContext(), "Done filtering", Toast.LENGTH_LONG).show();
         }
 

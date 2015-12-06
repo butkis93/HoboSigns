@@ -10,3 +10,14 @@ HoboSigns/libraries/opencv/build/outputs/aar/opencv-debug.aar
 HoboSigns/libraries/opencv/build/intermediates/incremental/packageResourcesdebug/merger.xml
 HoboSigns/libraries/opencv/build/intermediates/incremental/mergeAssets/androidTest/debug/merger.xml
 HoboSigns/libraries/opencv/build/intermediates/bundles/debug/classes.jar
+HoboSigns/libraries/opencv/build/outputs/aar/opencv-release.aar
+HoboSigns/libraries/opencv/build/outputs/aar/opencv-debug.aar
+HoboSigns/libraries/opencv/build/intermediates/bundles/debug/classes.jar
+HoboSigns/libraries/opencv/build/intermediates/incremental/aidl/debug/dependency.store
+HoboSigns/libraries/opencv/build/intermediates/res/resources-debug-androidTest.ap_
+HoboSigns/libraries/opencv/build/intermediates/incremental/packageResourcesdebug/merger.xml
+HoboSigns/libraries/opencv/build/intermediates/incremental/mergeAssets/debug/merger.xml
+HoboSigns/libraries/opencv/build/intermediates/incremental/mergeAssets/androidTest/debug/merger.xml
+HoboSigns/libraries/opencv/build/intermediates/incremental/aidl/release/dependency.store
+HoboSigns/libraries/opencv/build/intermediates/bundles/debug/classes.jar
+HoboSigns/libraries/opencv/build/generated/source/aidl/release/org/opencv/engine/OpenCVEngineInterface.java

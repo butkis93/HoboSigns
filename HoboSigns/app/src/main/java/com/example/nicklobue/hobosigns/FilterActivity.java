@@ -115,7 +115,7 @@ public class FilterActivity extends Activity implements View.OnClickListener,
         } else if (v == savePicture) {
             Log.v(TAG,"Saving filter picture");
             if (alteredBitmap != null) {
-                GlobalSign.setGlobalSign(chosenImageView.getDrawingCache());
+                GlobalSign.setGlobalSign(alteredBitmap);
                 releaseResources();
                 finish();
             }
