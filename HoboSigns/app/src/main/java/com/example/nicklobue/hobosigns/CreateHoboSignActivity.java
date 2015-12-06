@@ -127,18 +127,22 @@ public class CreateHoboSignActivity extends Activity implements View.OnClickList
         } else if (v == savePicture) {
             Log.v(TAG,"Saving picture");
             if (alteredBitmap != null) {
-                /*HoboSign hoboSign = new HoboSign(location,chosenImageView.getDrawingCache());
-                parseDatabaseManager.saveOrUpdate(hoboSign);*/
                 SaveSign saveSign = new SaveSign();
                 Thread thread1 = new Thread(saveSign);
                 thread1.start();
                 Toast.makeText(this,"Hobo Sign Created",Toast.LENGTH_SHORT).show();
+                releaseResources();
                 finish();
             }
         } else if (v == clearDrawing) {
             Log.v(TAG, "Clear drawing");
             setDrawingArea();
         }
+    }
+
+    void releaseResources(){
+        alteredBitmap.recycle();
+        bmp.recycle();
     }
 
     void setDrawingArea(){
@@ -156,8 +160,6 @@ public class CreateHoboSignActivity extends Activity implements View.OnClickList
         chosenImageView.setImageBitmap(alteredBitmap);
         chosenImageView.setOnTouchListener(this);
 
-        //clearDrawing.setVisibility(View.VISIBLE);
-        //colorPicker.setVisibility(View.VISIBLE);
         choosePicture.setText("Retake Picture");
     }
 
@@ -225,6 +227,7 @@ public class CreateHoboSignActivity extends Activity implements View.OnClickList
         public void run() {
             HoboSign hoboSign = new HoboSign(location,chosenImageView.getDrawingCache());
             ParseDatabaseManager.saveOrUpdate(hoboSign);
+            chosenImageView.destroyDrawingCache();
         }
     }
 }
