@@ -19,6 +19,8 @@
         android:layout_height="wrap_content"
         android:text="View HoboSigns"
         android:id="@+id/view_hobosigns"
+        android:drawableLeft="@drawable/ic_action_brush"
+        android:background="@android:color/transparent"
         android:layout_centerVertical="true"
         android:layout_alignLeft="@+id/create_hobosigns"
         android:layout_alignStart="@+id/create_hobosigns"
@@ -31,6 +33,8 @@
         android:text="Create HoboSigns"
         android:id="@+id/create_hobosigns"
         android:layout_below="@+id/view_hobosigns"
+        android:drawableLeft="@drawable/ic_action_present"
+        android:background="@android:color/transparent"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="54dp" />
 
